@@ -16,6 +16,7 @@ func Challenge() {
 	}
 
 	partOne(matrix)
+	partTwo(matrix)
 }
 
 func partOne(matrix [][]int) {
@@ -33,6 +34,43 @@ func partOne(matrix [][]int) {
 
 	fmt.Printf("Safe reports: %v\n", safeReports)
 
+}
+
+func partTwo(matrix [][]int) {
+	safeReports := 0
+
+	for i := 0; i < len(matrix); i++ {
+		row := matrix[i]
+		if !IsSafe(row) {
+			for x := 0; x < len(row); x++ {
+				newRow := removeIndex(row, x)
+				if IsSafe(newRow) {
+					safeReports++
+					break
+				}
+			}
+		} else {
+			safeReports++	
+		}
+	}
+	fmt.Printf("Safe reports: %v\n", safeReports)
+}
+
+func removeIndex(slice []int, index int) []int {
+    if index < 0 || index >= len(slice) {
+        return slice // Invalid index
+    }
+	result := make([]int, 0, len(slice)-1)
+	result = append(result, slice[:index]...)
+	result = append(result, slice[index+1:]...)
+    return result
+}
+
+func IsSafe(row []int) bool {
+	ruleOne := IsIncreasingWithinBounds(row)
+	ruleTwo := IsDecreasingWithinBounds(row)
+
+	return ruleOne != ruleTwo
 }
 
 func IsIncreasingWithinBounds(slice []int) bool {
