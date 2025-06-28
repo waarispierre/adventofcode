@@ -1,0 +1,5 @@
+package loadData
+
+func readData() {
+
+}
