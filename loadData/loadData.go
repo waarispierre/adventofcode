@@ -45,6 +45,28 @@ func ReadData(filename string) ([][]int, error) {
     return matrix, nil
 }
 
+func ReadDataInString(filename string) (string, error) {
+    file, err := os.Open(filename)
+    if err != nil {
+        return "", err
+    }
+    defer file.Close()
+	
+	var builder strings.Builder
+    scanner := bufio.NewScanner(file)
+    
+    for scanner.Scan() {
+        line := strings.TrimSpace(scanner.Text())
+        if line == "" {
+            continue // Skip empty lines
+        }
+		builder.WriteString(line)
+    }
+
+	return builder.String(), scanner.Err()
+}
+
+
 func GetColumn(matrix [][]int, colIndex int) []int {
     if len(matrix) == 0 {
         return nil

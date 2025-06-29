@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/waarispierre/adventOfCode/dayOne"
 	"github.com/waarispierre/adventOfCode/dayTwo"
+	"github.com/waarispierre/adventOfCode/dayThree"
 	"os"
 	"time"
 )
@@ -20,6 +21,8 @@ func main() {
 		dayOne.Challenge()
 	case "dayTwo":
 		dayTwo.Challenge()
+	case "dayThree":
+		dayThree.Challenge()
 	default:
 		fmt.Println("Please provide a parameter to say which challenge to run.\nOptions examples: dayOne, dayTwo etc.")
 	}
