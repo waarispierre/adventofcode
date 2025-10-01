@@ -18,6 +18,8 @@ func main() {
 		dayone.Challenge()
 	case "dayOneSimple":
 		dayone.ChallengeSimple()
+	case "dayOne-2":
+		dayone.ChallengeTwo()
 	default:
 		fmt.Println("Please provide a parameter to say which challenge to run.\nOptions examples: dayOne, dayOneSimple, dayTwo etc.")
 	}

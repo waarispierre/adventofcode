@@ -8,7 +8,7 @@ import (
 )
 
 func Challenge() {
-	fmt.Println("Starting day one")
+	fmt.Println("Starting day one part one")
 	data, err := loaddata.ReadData("dayone.txt")
 	if err != nil {
 		fmt.Printf("Error reading data: %v\n", err)
@@ -44,6 +44,34 @@ func Challenge() {
 	// Wait for calculation to complete
 	wg.Wait()
 	fmt.Println(<-resCh)
+}
+
+func ChallengeTwo() {
+	fmt.Println("Starting day one part two")
+	data, err := loaddata.ReadData("dayone.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	frequencyMap := make(map[int]int)
+	var row []int
+	
+	for i := 0; i < len(data); i++ {
+		row = data[i]
+		frequencyMap[row[1]]++
+	}
+
+	var leftValue int
+	var total int
+	
+	for i := 0; i < len(data); i++ {
+		row = data[i]
+		leftValue = row[0]
+		total += (frequencyMap[leftValue] * leftValue)
+	}
+
+	fmt.Println(total)
 }
 
 // ChallengeSimple does the same calculation as Challenge but without goroutines
