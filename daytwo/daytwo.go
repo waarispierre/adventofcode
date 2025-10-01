@@ -1,0 +1,77 @@
+package daytwo
+
+import (
+	"adventofcode/loaddata"
+	"fmt"
+	"sync"
+	"sync/atomic"
+)
+
+func ChallengeOne() {
+	data, err := loaddata.ReadData("daytwo.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	rowChannel := make(chan []int, int(len(data)/3))
+	var validReports int32 
+
+	var wg sync.WaitGroup
+	numberOfWorkers := 10
+
+	for i := 0; i < numberOfWorkers; i++ {
+		wg.Add(1)
+		go validateReport(rowChannel, &validReports, &wg)
+	}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		defer close(rowChannel)
+		for i := 0; i < len(data); i++ {
+			rowChannel <- data[i]
+		}
+	}()
+
+	wg.Wait()
+
+	// Read the final result
+	fmt.Println("Valid reports:", validReports)
+}
+
+func validateReport(rowCh <-chan []int, validReports *int32, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for row := range rowCh {
+		if validateIncrements(row) {
+			atomic.AddInt32(validReports, 1)
+		}
+	}
+}
+
+func validateIncrements(row []int) bool {
+	absIncrement := 0 
+	var increasing bool
+	for i := 0; i < len(row)-1; i++ {
+		if i == 0 {
+			increasing = row[0] < row[1]
+		}
+		if increasing != (row[i] < row[i+1]) {
+			return false
+		}
+		absIncrement = abs(row[i] - row[i+1])
+		oneOrMoreRule := absIncrement >= 1
+		threeOrLessRule := absIncrement <= 3
+		if (!oneOrMoreRule || !threeOrLessRule) {
+			return false
+		}
+	}
+	return true
+}
+
+func abs(val int) int {
+	if val < 0 {
+		return val * -1
+	}
+	return val
+}

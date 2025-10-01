@@ -2,6 +2,7 @@ package main
 
 import (
 	"adventofcode/dayone"
+	"adventofcode/daytwo"
 	"fmt"
 	"os"
 	"time"
@@ -20,6 +21,8 @@ func main() {
 		dayone.ChallengeSimple()
 	case "dayOne-2":
 		dayone.ChallengeTwo()
+	case "dayTwo":
+		daytwo.ChallengeOne()
 	default:
 		fmt.Println("Please provide a parameter to say which challenge to run.\nOptions examples: dayOne, dayOneSimple, dayTwo etc.")
 	}
