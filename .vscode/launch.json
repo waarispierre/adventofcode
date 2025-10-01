@@ -1,0 +1,84 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Day One",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [
+                "dayOne"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Day One Simple",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [
+                "dayOneSimple"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Day One Part 2",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [
+                "dayOne-2"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Day Two",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [
+                "dayTwo"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Day Two - Challenge 2",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [
+                "dayTwo-2"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Day Three - Challenge 2",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [
+                "dayThree-2"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug with Custom Args",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

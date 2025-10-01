@@ -1,42 +1,163 @@
-package dayOne
+package dayone
 
 import (
+	"adventofcode/loaddata"
 	"fmt"
-	"github.com/waarispierre/adventOfCode/loadData"
-	"math"
 	"sort"
+	"sync"
 )
 
 func Challenge() {
-	matrix, err := loadData.ReadData("inputOne.txt")
-
+	fmt.Println("Starting day one part one")
+	data, err := loaddata.ReadData("dayone.txt")
 	if err != nil {
-		fmt.Sprintf("An error occured loading the data %v\n", err)
+		fmt.Printf("Error reading data: %v\n", err)
+		return
 	}
 
-	fmt.Sprintf("loook: %v\n", matrix)
+    bufferSize := 105
+	lch := make(chan int, bufferSize) 
+	rch := make(chan int, bufferSize)
+	resCh := make(chan int, 1)
 
-	col1 := loadData.GetColumn(matrix, 0)
-	col2 := loadData.GetColumn(matrix, 1)
+	var wg sync.WaitGroup
+	wg.Add(1)
 
-	sort.Ints(col1)
-	sort.Ints(col2)
+	// Start the calculation goroutine
+	go func() {
+		defer wg.Done()
+		var totalDistance int
+		for left := range lch {
+			right := <-rch
+			distance := left - right
+			if distance < 0 {
+				distance = -1 * distance
+			}
+			totalDistance = totalDistance + distance
+		}
+		resCh <- totalDistance
+	}()
 
-	var totalDistance int
-	for i := 0; i < len(col1); i++ {
-		totalDistance = totalDistance + int(math.Abs(float64(col1[i]-col2[i])))
+	// Start populating channels concurrently with calculation
+	go createList(data, lch, rch)
+
+	// Wait for calculation to complete
+	wg.Wait()
+	fmt.Println(<-resCh)
+}
+
+func ChallengeTwo() {
+	fmt.Println("Starting day one part two")
+	data, err := loaddata.ReadData("dayone.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
-	col2Counts := make(map[int]int)
-	for _, value := range col2 {
-		col2Counts[value]++
+	frequencyMap := make(map[int]int)
+	var row []int
+	
+	for i := 0; i < len(data); i++ {
+		row = data[i]
+		frequencyMap[row[1]]++
 	}
 
+	var leftValue int
 	var total int
-	for _, value := range col1 {
-		total = total + (col2Counts[value] * value)
+	
+	for i := 0; i < len(data); i++ {
+		row = data[i]
+		leftValue = row[0]
+		total += (frequencyMap[leftValue] * leftValue)
 	}
 
-	fmt.Println(totalDistance)
 	fmt.Println(total)
 }
+
+// ChallengeSimple does the same calculation as Challenge but without goroutines
+func ChallengeSimple() {
+	fmt.Println("Starting day one (simple version)")
+	data, err := loaddata.ReadData("dayone.txt")
+	if err != nil {
+		fmt.Printf("Error reading data: %v\n", err)
+		return
+	}
+
+	// Create and populate left and right lists
+	var leftList []int
+	var rightList []int
+
+	for _, row := range data {
+		leftList = append(leftList, row[0])
+		rightList = append(rightList, row[1])
+	}
+
+	// Sort both lists
+	sort.Ints(leftList)
+	sort.Ints(rightList)
+
+	// Calculate total distance
+	var totalDistance int
+	for i := 0; i < len(leftList); i++ {
+		distance := leftList[i] - rightList[i]
+		if distance < 0 {
+			distance = -distance
+		}
+		totalDistance += distance
+	}
+
+	fmt.Printf("Total Distance: %d\n", totalDistance)
+}
+
+func createList(data [][]int, lch chan<- int, rch chan<- int) {
+	var rTempList []int
+	var lTempList []int
+
+	for i := 0; i < len(data); i++ {
+		row := data[i]
+		lTempList = append(lTempList, row[0])
+		rTempList = append(rTempList, row[1])
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// Sort both lists in parallel
+	go func() {
+		defer wg.Done()
+		sortList(&lTempList)
+	}()
+
+	go func() {
+		defer wg.Done()
+		sortList(&rTempList)
+	}()
+
+	wg.Wait() // Wait for sorting to complete
+
+	// Now populate channels in parallel
+	go func() {
+		populateChannel(lch, lTempList)
+		close(lch)
+	}()
+
+	go func() {
+		populateChannel(rch, rTempList)
+		close(rch)
+	}()
+
+	return
+}
+
+func populateChannel(ch chan<- int, list []int) {
+	for i := 0; i < len(list); i++ {
+        ch <- list[i]
+	}
+}
+
+func sortList(list *[]int) {
+	sort.Slice(*list, func(i, j int) bool {
+		return (*list)[i] < (*list)[j]
+	})
+}
+
