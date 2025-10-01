@@ -47,7 +47,8 @@ func ReadData(filename string) ([][]int, error) {
 }
 
 func ReadDataInString(filename string) (string, error) {
-	file, err := os.Open(filename)
+	path := fmt.Sprintf("inputdata/%v", filename)
+	file, err := os.Open(path)
 	if err != nil {
 		return "", err
 	}

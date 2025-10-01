@@ -1,3 +1,2 @@
 *.exe
-inputdata/dayone.txt
-inputdata/daytwo.txt
+*/*.txt
