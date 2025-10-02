@@ -1,7 +1,7 @@
 package dayone
 
 import (
-	"adventofcode/loaddata"
+	"adventofcode/shared/loaddata"
 	"fmt"
 	"sort"
 	"sync"
@@ -9,7 +9,7 @@ import (
 
 func Challenge() {
 	fmt.Println("Starting day one part one")
-	data, err := loaddata.ReadData("dayone.txt")
+	data, err := loaddata.ReadData("day01/dayone.txt")
 	if err != nil {
 		fmt.Printf("Error reading data: %v\n", err)
 		return
@@ -48,7 +48,7 @@ func Challenge() {
 
 func ChallengeTwo() {
 	fmt.Println("Starting day one part two")
-	data, err := loaddata.ReadData("dayone.txt")
+	data, err := loaddata.ReadData("day01/dayone.txt")
 	if err != nil {
 		fmt.Println(err)
 		return

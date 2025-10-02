@@ -8,8 +8,7 @@ import (
 	"strings"
 )
 
-func ReadData(filename string) ([][]int, error) {
-	path := fmt.Sprintf("inputdata/%v", filename)
+func ReadData(path string) ([][]int, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -46,8 +45,7 @@ func ReadData(filename string) ([][]int, error) {
 	return matrix, nil
 }
 
-func ReadDataInString(filename string) (string, error) {
-	path := fmt.Sprintf("inputdata/%v", filename)
+func ReadDataInString(path string) (string, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return "", err

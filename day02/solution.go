@@ -1,14 +1,14 @@
 package daytwo
 
 import (
-	"adventofcode/loaddata"
+	"adventofcode/shared/loaddata"
 	"fmt"
 	"sync"
 	"sync/atomic"
 )
 
 func ChallengeOne() {
-	data, err := loaddata.ReadData("daytwo.txt")
+	data, err := loaddata.ReadData("day02/daytwo.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -41,7 +41,7 @@ func ChallengeOne() {
 }
 
 func ChallengeTwo() {
-	data, err := loaddata.ReadData("daytwo.txt")
+	data, err := loaddata.ReadData("day02/daytwo.txt")
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -1,7 +1,7 @@
 package daythree
 
 import (
-	"adventofcode/loaddata"
+	"adventofcode/shared/loaddata"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -9,7 +9,7 @@ import (
 
 func ChallengeOne() {
 	fmt.Println("Day three challenge one started")
-	data, err := loaddata.ReadDataInString("daythree.txt")	
+	data, err := loaddata.ReadDataInString("day03/daythree.txt")	
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -22,7 +22,7 @@ func ChallengeOne() {
 
 func ChallengeTwo() {
 	fmt.Println("Day three challenge two started")
-	data, err := loaddata.ReadDataInString("daythree.txt")	
+	data, err := loaddata.ReadDataInString("day03/daythree.txt")	
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"adventofcode/dayone"
-	"adventofcode/daythree"
-	"adventofcode/daytwo"
+	"adventofcode/day01"
+	"adventofcode/day03"
+	"adventofcode/day02"
 	"fmt"
 	"os"
 	"time"
