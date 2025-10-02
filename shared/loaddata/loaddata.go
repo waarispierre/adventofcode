@@ -45,6 +45,29 @@ func ReadData(path string) ([][]int, error) {
 	return matrix, nil
 }
 
+func ReadDataInRuneMatrix(path string) (matrix [][]rune, err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	var line string
+	var runes []rune
+	for scanner.Scan() {
+		line = strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		runes = []rune(line)
+		matrix = append(matrix, runes)
+	}
+
+	return
+}
+
 func ReadDataInString(path string) (string, error) {
 	file, err := os.Open(path)
 	if err != nil {
