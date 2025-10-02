@@ -1,11 +1,31 @@
-package daythree
+package main
 
 import (
 	"adventofcode/shared/loaddata"
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
+	"time"
 )
+
+func main() {
+	start := time.Now()
+	if len(os.Args) < 2 {
+		os.Exit(1)
+	}
+
+	switch os.Args[1] {
+	case "1":
+		ChallengeOne()
+	case "2":
+		ChallengeTwo()
+	default:
+		fmt.Println("Options 1 or 2")
+	}
+
+	fmt.Println("Duration:", time.Since(start))
+}
 
 func ChallengeOne() {
 	fmt.Println("Day three challenge one started")

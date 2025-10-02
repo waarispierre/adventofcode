@@ -1,11 +1,31 @@
-package daytwo
+package main
 
 import (
 	"adventofcode/shared/loaddata"
 	"fmt"
+	"os"
 	"sync"
 	"sync/atomic"
+	"time"
 )
+
+func main() {
+	start := time.Now()
+	if len(os.Args) < 2 {
+		os.Exit(1)
+	}
+
+	switch os.Args[1] {
+	case "1":
+		ChallengeOne()
+	case "2":
+		ChallengeTwo()
+	default:
+		fmt.Println("Options 1 or 2")
+	}
+
+	fmt.Println("Duration:", time.Since(start))
+}
 
 func ChallengeOne() {
 	data, err := loaddata.ReadData("day02/daytwo.txt")
