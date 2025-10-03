@@ -60,13 +60,13 @@
             "cwd": "${workspaceFolder}"
         },
         {
-            "name": "Debug Day Three - Challenge 2",
+            "name": "Debug Day Four - 2",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/cmd",
+            "program": "${workspaceFolder}/day05",
             "args": [
-                "dayThree-2"
+                "2"
             ],
             "cwd": "${workspaceFolder}"
         },
