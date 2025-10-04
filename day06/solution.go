@@ -4,8 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sync"
 	"time"
 )
+
+var mut sync.RWMutex
 
 func main() {
 	start := time.Now()
@@ -26,7 +29,91 @@ func main() {
 }
 
 func ChallengeTwo() {
-	panic("unimplemented")
+	data, pos, dir, err := getData()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var originalPos []int = pos
+	var originalDir rune = dir
+	maxY := len(data)
+	maxX := len(data[0])
+	counter := 0
+
+	mapCh := make(chan [][]rune, 30)
+	var wg sync.WaitGroup
+
+	for i := 0; i < 20; i++ {
+		wg.Add(1)
+	 	go findLoop(mapCh, &counter, originalDir, originalPos, maxX, maxY, &wg)	
+	}
+
+	wg.Add(1)
+	go func ()  {
+		defer wg.Done()
+		defer close(mapCh)
+		for y := 0; y < maxY; y++ {
+			for x := 0; x < maxX; x++ {
+				if data[y][x] == '#' || (originalPos[0] == x && originalPos[1] == y) {
+					continue
+				}
+				pos = make([]int, len(originalPos))
+				dir = originalDir
+				copy(pos, originalPos)
+				updateData := make([][]rune, len(data))
+				for i, row := range data {
+					updateData[i] = make([]rune, len(data[0]))
+					copy(updateData[i], row)
+				}
+				addObstacle(&updateData, x, y)
+				mapCh <- updateData
+			}
+		}
+	}()
+
+	wg.Wait()
+	
+	fmt.Println("Number of options:", counter)
+}
+
+func findLoop(mapCh chan [][]rune, counter *int, origDir rune, origPos []int, maxX, maxY int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for ch := range mapCh {
+		dir := origDir
+		pos := make([]int, len(origPos))
+		copy(pos, origPos)
+		positions := make(map[string]int)
+		addPostionToLoopMap(&positions, pos, dir)	
+		var onMappedArea bool = true
+		var foundLoop bool = false
+		for onMappedArea && !foundLoop {
+			moveGuard(&ch, &dir, &pos, &onMappedArea, maxX, maxY)
+			addPostionToLoopMap(&positions, pos, dir)
+			if !onMappedArea {
+				continue
+			}
+			if positions[fmt.Sprintf("%c:%v:%v", dir, pos[0], pos[1])] > 1 {
+				incrementCounter(counter)
+				foundLoop = true
+				continue
+			}
+		}
+	}
+}
+
+func incrementCounter(counter *int) {
+	mut.Lock()
+	*counter++
+	mut.Unlock()
+}
+
+
+func addPostionToLoopMap(positions *map[string]int, pos []int, dir rune) {
+	(*positions)[fmt.Sprintf("%c:%v:%v", dir, pos[0], pos[1])] += 1 
+}
+
+func addObstacle(data *[][]rune, x, y int) {
+	(*data)[y][x] = 'O'	
 }
 
 func ChallengeOne() {
@@ -75,7 +162,7 @@ func moveGuard(data *[][]rune, dir *rune, pos *[]int, onMappedArea *bool, maxX, 
 		*onMappedArea = false
 		return
 	}
-	if (*data)[newY][newX] != '#' {
+	if (*data)[newY][newX] == '.' {
 		(*data)[newY][newX] = *dir
 		(*data)[curY][curX] = '.'
 	} else {
@@ -84,18 +171,38 @@ func moveGuard(data *[][]rune, dir *rune, pos *[]int, onMappedArea *bool, maxX, 
 			incrY = 0
 			incrX = -1
 			*dir = '<'
+			if (*data)[curY][curX-1] != '.' {
+				incrY = -1
+				incrX = 0	
+				*dir = '^'
+			}
 		case '<':
 			incrY = -1
 			incrX = 0
 			*dir = '^'
+			if (*data)[curY-1][curX] != '.' {
+				incrY = 0
+				incrX = 1	
+				*dir = '>'
+			}
 		case '^':
 			incrY = 0
 			incrX = 1
 			*dir = '>'
+			if (*data)[curY][curX+1] != '.' {
+				incrY = 1
+				incrX = 0	
+				*dir = 'v'
+			}
 		case '>':
 			incrY = 1
 			incrX = 0
 			*dir = 'v'
+			if (*data)[curY+1][curX] != '.' {
+				incrY = 0
+				incrX = -1	
+				*dir = '<'
+			}
 		}
 		newX = curX + incrX
 		newY = curY + incrY
