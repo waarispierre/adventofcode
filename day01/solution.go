@@ -1,15 +1,35 @@
-package dayone
+package main
 
 import (
-	"adventofcode/loaddata"
+	"adventofcode/shared/loaddata"
 	"fmt"
+	"os"
 	"sort"
 	"sync"
+	"time"
 )
+
+func main() {
+	start := time.Now()
+	if len(os.Args) < 2 {
+		os.Exit(1)
+	}
+
+	switch os.Args[1] {
+	case "1":
+		Challenge()
+	case "2":
+		ChallengeTwo()
+	default:
+		fmt.Println("Options 1 or 2")
+	}
+
+	fmt.Println("Duration:", time.Since(start))
+}
 
 func Challenge() {
 	fmt.Println("Starting day one part one")
-	data, err := loaddata.ReadData("dayone.txt")
+	data, err := loaddata.ReadData("day01/dayone.txt")
 	if err != nil {
 		fmt.Printf("Error reading data: %v\n", err)
 		return
@@ -48,7 +68,7 @@ func Challenge() {
 
 func ChallengeTwo() {
 	fmt.Println("Starting day one part two")
-	data, err := loaddata.ReadData("dayone.txt")
+	data, err := loaddata.ReadData("day01/dayone.txt")
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -8,8 +8,7 @@ import (
 	"strings"
 )
 
-func ReadData(filename string) ([][]int, error) {
-	path := fmt.Sprintf("inputdata/%v", filename)
+func ReadData(path string) ([][]int, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -46,8 +45,30 @@ func ReadData(filename string) ([][]int, error) {
 	return matrix, nil
 }
 
-func ReadDataInString(filename string) (string, error) {
-	path := fmt.Sprintf("inputdata/%v", filename)
+func ReadDataInRuneMatrix(path string) (matrix [][]rune, err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	var line string
+	var runes []rune
+	for scanner.Scan() {
+		line = strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		runes = []rune(line)
+		matrix = append(matrix, runes)
+	}
+
+	return
+}
+
+func ReadDataInString(path string) (string, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return "", err

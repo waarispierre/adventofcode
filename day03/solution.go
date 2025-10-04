@@ -1,15 +1,35 @@
-package daythree
+package main
 
 import (
-	"adventofcode/loaddata"
+	"adventofcode/shared/loaddata"
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
+	"time"
 )
+
+func main() {
+	start := time.Now()
+	if len(os.Args) < 2 {
+		os.Exit(1)
+	}
+
+	switch os.Args[1] {
+	case "1":
+		ChallengeOne()
+	case "2":
+		ChallengeTwo()
+	default:
+		fmt.Println("Options 1 or 2")
+	}
+
+	fmt.Println("Duration:", time.Since(start))
+}
 
 func ChallengeOne() {
 	fmt.Println("Day three challenge one started")
-	data, err := loaddata.ReadDataInString("daythree.txt")	
+	data, err := loaddata.ReadDataInString("day03/daythree.txt")	
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -22,7 +42,7 @@ func ChallengeOne() {
 
 func ChallengeTwo() {
 	fmt.Println("Day three challenge two started")
-	data, err := loaddata.ReadDataInString("daythree.txt")	
+	data, err := loaddata.ReadDataInString("day03/daythree.txt")	
 	if err != nil {
 		fmt.Println(err)
 		return
