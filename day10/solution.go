@@ -46,22 +46,52 @@ func challengeOne() {
 		}
 	}
 
-	var recursive func(row, col int)
-	recursive = func(row, col int) {
+	var recursive func(origanalRow, origanalCol, row, col int)
+	recursive = func(origanalRow, origanalCol, row, col int) {
 		elev := data[row][col]
-		if elev == 0 {
-			fmt.Println("starting")
-		}
+		fmt.Println("Elevation:", elev)
 		if elev == 9 {
-			fmt.Println("end")
+			routes[fmt.Sprintf("%v:%v", origanalRow, origanalCol)] += 1
 			return
 		}
-
-		if  {
-			
+    
+		stopRecursion := true
+		//left
+		if col > 0 && data[row][col -1] - elev == 1 {
+			fmt.Println("left", row, col)
+			recursive(origanalRow, origanalCol, row, col - 1)
+			stopRecursion = false
+		}
+		//right
+		if col < len(data[row]) - 1 && data[row][col + 1] -elev == 1 {
+			fmt.Println("right", row, col)
+			recursive(origanalRow, origanalCol, row, col + 1)
+			stopRecursion = false
+		}
+		//up 
+		if row > 0 && data[row - 1][col] - elev == 1 {
+			fmt.Println("up", row, col)
+			recursive(origanalRow, origanalCol, row - 1, col)
+			stopRecursion = false
+		}
+		//down
+		if row < len(data) - 1 && data[row + 1][col] - elev == 1 {
+			fmt.Println("down", row, col)
+			recursive(origanalRow, origanalCol, row + 1, col)
+			stopRecursion = false
+		}
+		if stopRecursion {
+			fmt.Println("Stop recursion")
+			return
 		}
 	}
-	recursive(0, 2)
+
+	for k := range routes {
+		row, _ := strconv.Atoi(fmt.Sprintf("%c", k[0]))
+		col, _ := strconv.Atoi(fmt.Sprintf("%c", k[2]))
+		fmt.Println(row, col)	
+		recursive(row, col, row, col)
+	}
 
 	fmt.Println(routes)
 }
