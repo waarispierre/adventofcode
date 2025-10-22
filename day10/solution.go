@@ -36,9 +36,34 @@ func challengeOne() {
 		os.Exit(1)
 	}
 
-	for _, d := range data {
+	routes := make(map[string]int)
+	for row, d := range data {
 		fmt.Println(d)
+		for col, pos := range d {
+			if pos == 0 {
+				routes[fmt.Sprintf("%v:%v", row, col)] = 0
+			}
+		}
 	}
+
+	var recursive func(row, col int)
+	recursive = func(row, col int) {
+		elev := data[row][col]
+		if elev == 0 {
+			fmt.Println("starting")
+		}
+		if elev == 9 {
+			fmt.Println("end")
+			return
+		}
+
+		if  {
+			
+		}
+	}
+	recursive(0, 2)
+
+	fmt.Println(routes)
 }
 
 func loadData(s string) (data [][]int, err error) {
