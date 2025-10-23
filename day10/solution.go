@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -38,10 +39,9 @@ func challengeOne() {
 
 	routes := make(map[string]map[string]int)
 	for row, d := range data {
-		fmt.Println(d)
 		for col, pos := range d {
 			if pos == 0 {
-				routes[fmt.Sprintf("%v:%v", row, col)] = map[string]int{}
+				routes[fmt.Sprintf("%v:%v", row, col)] = make(map[string]int)
 			}
 		}
 	}
@@ -50,10 +50,6 @@ func challengeOne() {
 	recursive = func(origanalRow, origanalCol, row, col int) {
 		elev := data[row][col]
 		if elev == 9 {
-			exist := routes[fmt.Sprintf("%v:%v", origanalRow, origanalCol)]
-			if exist {
-				return
-			}
 			routes[fmt.Sprintf("%v:%v", origanalRow, origanalCol)][fmt.Sprintf("%v:%v", row, col)] = 0
 			return
 		}
@@ -85,16 +81,15 @@ func challengeOne() {
 	}
 
 	for k := range routes {
-		row, _ := strconv.Atoi(fmt.Sprintf("%c", k[0]))
-		col, _ := strconv.Atoi(fmt.Sprintf("%c", k[2]))
-		fmt.Println(row, col)
+		parts := strings.Split(k, ":")
+		row, _ := strconv.Atoi(parts[0])
+		col, _ := strconv.Atoi(parts[1])
 		recursive(row, col, row, col)
 	}
 
 	total := 0
-	for k, v := range routes {
+	for _, v := range routes {
 		total += len(v)
-		fmt.Println(k, len(v))
 	}
 
 	fmt.Println("Result:", total)
